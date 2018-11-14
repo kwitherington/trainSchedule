@@ -25,7 +25,6 @@ database.ref().on("child_added", function(snapshot) {
     destInput = snapshot.val().destination;
     firstTimeInput = snapshot.val().firstTime;
     freqInput = snapshot.val().frequency;
-    console.log(nameInput);
     loadRow();
 
 // If any errors are experienced, log them to console.
@@ -61,11 +60,28 @@ function loadRow() {
     var nextArv = $("<td>");
     var minsAway = $("<td>");
 
+    var firstTimeMoment = moment(firstTimeInput, "hh:mm").format("h:mm:ss a");
+    var diff = moment(firstTimeMoment, "h:mm:ss a").diff(moment(), 'minutes');
+
+    if (diff > 0) {
+        nextArv.text(firstTimeMoment);
+        minsAway.text(diff);
+    } else if (diff == 0) {
+        nextArv.text("Now");
+        minsAway.text("0");
+    } else {
+        while (diff < 0) {
+            firstTimeMoment = moment(firstTimeMoment,"h:mm:ss a").add(freqInput, 'minutes').format("h:mm:ss a");
+            diff = moment(firstTimeMoment, "h:mm:ss a").diff(moment(), 'minutes');
+        }
+        nextArv.text(firstTimeMoment);
+        minsAway.text(diff);
+    }
+
+   
     name.text(nameInput);
     destination.text(destInput);
     frequency.text(freqInput);
-    nextArv.text("future time based on frequency");
-    minsAway.text("future minus current");
 
     newRow.append(name);
     newRow.append(destination);
