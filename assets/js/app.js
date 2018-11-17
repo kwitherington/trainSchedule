@@ -77,7 +77,6 @@ function loadRow() {
         nextArv.text(firstTimeMoment);
         minsAway.text(diff);
     }
-
    
     name.text(nameInput);
     destination.text(destInput);
